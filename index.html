@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PIKA-PIKA ROCKUMBION Song Catalog</title>
+<title>PikaFlower Song Catalog</title>
 
 <style>
+
 body{
-    font-family:Arial, sans-serif;
+    font-family: Arial, sans-serif;
     margin:20px;
+    background:#f5f5f5;
 }
 
 h1{
@@ -18,39 +20,55 @@ h1{
 
 #search{
     width:100%;
-    padding:10px;
+    padding:12px;
     margin-bottom:15px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.table-container{
+    overflow-x:auto;
+    background:white;
+    border:1px solid #ddd;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-}
-
-th,td{
-    border:1px solid #ddd;
-    padding:8px;
+    min-width:1400px;
 }
 
 th{
     background:#333;
     color:white;
+    padding:10px;
+    position:sticky;
+    top:0;
+}
+
+td{
+    border:1px solid #ddd;
+    padding:8px;
+    white-space:nowrap;
 }
 
 tr:nth-child(even){
-    background:#f5f5f5;
+    background:#f8f8f8;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <h1>🎸 PikaFlower Song Catalog</h1>
 
-<input id="search" type="text" placeholder="Search songs...">
+<input type="text" id="search" placeholder="Search songs...">
 
-<div style="overflow-x:auto;">
+<div class="table-container">
+
 <table>
+
 <thead>
 <tr>
 <th>#</th>
@@ -61,71 +79,80 @@ tr:nth-child(even){
 <th>Language</th>
 <th>Suggested By</th>
 <th>Notes</th>
-<th>Recording</th>
-<th>Video</th>
-<th>Lyrics</th>
+<th>Recording Link</th>
+<th>Video Link</th>
+<th>Lyrics Link</th>
 <th>Votes</th>
 </tr>
 </thead>
 
-<tbody id="songsBody"></tbody>
+<tbody id="songsBody">
+</tbody>
 
 </table>
+
 </div>
-    
+
 <script>
+
+let allRows = [];
 
 fetch('songs.csv')
 .then(response => response.text())
-.then(data => {
+.then(text => {
 
-    const rows = data.split('\n');
+    const rows = text.trim().split('\n');
+
+    allRows = rows.slice(1).map(row => row.split(','));
+
+    renderTable(allRows);
+
+})
+.catch(error => {
+    console.error(error);
+    document.getElementById('songsBody').innerHTML =
+        '<tr><td colspan="12">Unable to load songs.csv</td></tr>';
+});
+
+function renderTable(rows){
 
     const tbody = document.getElementById('songsBody');
 
-    for(let i=1;i<rows.length;i++){
+    tbody.innerHTML = '';
 
-        const cols = rows[i].split(',');
-
-        if(cols.length < 6) continue;
+    rows.forEach(cols => {
 
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
-            tr.innerHTML = `
-    <td>${cols[0] || ''}</td>
-    <td>${cols[1] || ''}</td>
-    <td>${cols[2] || ''}</td>
-    <td>${cols[3] || ''}</td>
-    <td>${cols[4] || ''}</td>
-    <td>${cols[5] || ''}</td>
-    <td>${cols[6] || ''}</td>
-    <td>${cols[7] || ''}</td>
-    <td>${cols[8] || ''}</td>
-    <td>${cols[9] || ''}</td>
-    <td>${cols[10] || ''}</td>
-    <td>${cols[11] || ''}</td>
-`;
+            <td>${cols[0] || ''}</td>
+            <td>${cols[1] || ''}</td>
+            <td>${cols[2] || ''}</td>
+            <td>${cols[3] || ''}</td>
+            <td>${cols[4] || ''}</td>
+            <td>${cols[5] || ''}</td>
+            <td>${cols[6] || ''}</td>
+            <td>${cols[7] || ''}</td>
+            <td>${cols[8] || ''}</td>
+            <td>${cols[9] || ''}</td>
+            <td>${cols[10] || ''}</td>
+            <td>${cols[11] || ''}</td>
         `;
 
         tbody.appendChild(tr);
-    }
-});
-
-document.getElementById('search').addEventListener('keyup', function(){
-
-    let value = this.value.toLowerCase();
-
-    let rows = document.querySelectorAll('#songsBody tr');
-
-    rows.forEach(row => {
-
-        row.style.display =
-            row.innerText.toLowerCase().includes(value)
-            ? ''
-            : 'none';
 
     });
+}
+
+document.getElementById('search').addEventListener('input', function(){
+
+    const search = this.value.toLowerCase();
+
+    const filtered = allRows.filter(row =>
+        row.join(' ').toLowerCase().includes(search)
+    );
+
+    renderTable(filtered);
 
 });
 
