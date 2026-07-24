@@ -53,12 +53,18 @@ tr:nth-child(even){
 <table>
 <thead>
 <tr>
+<th>#</th>
 <th>Song</th>
 <th>Key</th>
 <th>Genre</th>
 <th>Artist</th>
 <th>Language</th>
 <th>Suggested By</th>
+<th>Notes</th>
+<th>Recording</th>
+<th>Video</th>
+<th>Lyrics</th>
+<th>Votes</th>
 </tr>
 </thead>
 
@@ -86,12 +92,20 @@ fetch('songs.csv')
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
-            <td>${cols[1] || ''}</td>
-            <td>${cols[2] || ''}</td>
-            <td>${cols[3] || ''}</td>
-            <td>${cols[4] || ''}</td>
-            <td>${cols[5] || ''}</td>
-            <td>${cols[6] || ''}</td>
+            tr.innerHTML = `
+    <td>${cols[0] || ''}</td>
+    <td>${cols[1] || ''}</td>
+    <td>${cols[2] || ''}</td>
+    <td>${cols[3] || ''}</td>
+    <td>${cols[4] || ''}</td>
+    <td>${cols[5] || ''}</td>
+    <td>${cols[6] || ''}</td>
+    <td>${cols[7] || ''}</td>
+    <td>${cols[8] || ''}</td>
+    <td>${cols[9] || ''}</td>
+    <td>${cols[10] || ''}</td>
+    <td>${cols[11] || ''}</td>
+`;
         `;
 
         tbody.appendChild(tr);
