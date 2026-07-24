@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PikaFlower Song Catalog</title>
+<title>PIKA-PIKA ROCKUMBION Song Catalog</title>
 
 <style>
 body{
@@ -49,6 +49,7 @@ tr:nth-child(even){
 
 <input id="search" type="text" placeholder="Search songs...">
 
+<div style="overflow-x:auto;">
 <table>
 <thead>
 <tr>
@@ -64,7 +65,8 @@ tr:nth-child(even){
 <tbody id="songsBody"></tbody>
 
 </table>
-
+</div>
+    
 <script>
 
 fetch('songs.csv')
