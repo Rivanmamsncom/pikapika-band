@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PikaFlower Song Catalog</title>
+
+<style>
+body{
+    font-family:Arial, sans-serif;
+    margin:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+#search{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:8px;
+}
+
+th{
+    background:#333;
+    color:white;
+}
+
+tr:nth-child(even){
+    background:#f5f5f5;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🎸 PikaFlower Song Catalog</h1>
+
+<input id="search" type="text" placeholder="Search songs...">
+
+<table>
+<thead>
+<tr>
+<th>Song</th>
+<th>Key</th>
+<th>Genre</th>
+<th>Artist</th>
+<th>Language</th>
+<th>Suggested By</th>
+</tr>
+</thead>
+
+<tbody id="songsBody"></tbody>
+
+</table>
+
+<script>
+
+fetch('songs.csv')
+.then(response => response.text())
+.then(data => {
+
+    const rows = data.split('\n');
+
+    const tbody = document.getElementById('songsBody');
+
+    for(let i=1;i<rows.length;i++){
+
+        const cols = rows[i].split(',');
+
+        if(cols.length < 6) continue;
+
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+            <td>${cols[1] || ''}</td>
+            <td>${cols[2] || ''}</td>
+            <td>${cols[3] || ''}</td>
+            <td>${cols[4] || ''}</td>
+            <td>${cols[5] || ''}</td>
+            <td>${cols[6] || ''}</td>
+        `;
+
+        tbody.appendChild(tr);
+    }
+});
+
+document.getElementById('search').addEventListener('keyup', function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll('#songsBody tr');
+
+    rows.forEach(row => {
+
+        row.style.display =
+            row.innerText.toLowerCase().includes(value)
+            ? ''
+            : 'none';
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
