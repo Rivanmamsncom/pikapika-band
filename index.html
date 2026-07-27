@@ -22,7 +22,6 @@ body{
 
 h1{
     text-align:center;
-    margin-bottom:20px;
 }
 
 #search{
@@ -64,6 +63,20 @@ tr:hover{
     background:#fff8d6;
 }
 
+.action-link{
+    text-decoration:none;
+    color:white;
+    background:#7b1fa2;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:12px;
+    display:inline-block;
+}
+
+.action-link:hover{
+    background:#ff6600;
+}
+
 .song-link{
     text-decoration:none;
     color:#7b1fa2;
@@ -72,20 +85,6 @@ tr:hover{
 
 .song-link:hover{
     color:#ff6600;
-}
-
-.action-link{
-    text-decoration:none;
-    color:white;
-    background:#7b1fa2;
-    padding:5px 8px;
-    border-radius:6px;
-    font-size:12px;
-    display:inline-block;
-}
-
-.action-link:hover{
-    background:#ff6600;
 }
 
 </style>
@@ -119,7 +118,8 @@ tr:hover{
 </tr>
 </thead>
 
-<tbody id="songsBody"></tbody>
+<tbody id="songsBody">
+</tbody>
 
 </table>
 
@@ -145,7 +145,7 @@ fetch('songs.csv')
     console.error(error);
 
     document.getElementById('songsBody').innerHTML =
-    '<tr><td colspan="9">Unable to load songs.csv</td></tr>';
+        '<tr><td colspan="9">Unable to load songs.csv</td></tr>';
 
 });
 
@@ -159,57 +159,32 @@ function renderTable(rows){
 
         const tr = document.createElement('tr');
 
-        // CSV columns
-        // 0 #
-        // 1 Song
-        // 2 Key
-        // 3 Genre
-        // 4 Artist
-        // 5 Language
-        // 6 Suggested By
-        // 7 Notes
-        // 8 Recording Link
-        // 9 Video Link
-        // 10 Lyrics Link
-        // 11 Votes
-
-        let songDisplay = cols[1] || '';
-
-        if(cols[9] && cols[9].startsWith('http')){
-            songDisplay =
-            `${cols[9]}
-                ${cols[1]}
-            </a>`;
-        }
-
         let recording = '';
+        let video = '';
+        let lyrics = '';
 
         if(cols[8] && cols[8].startsWith('http')){
             recording =
-            `${cols[8]}    target="_blank"
-            class="action-link">
+            `${cols[8]}
                 🎵 Recording
             </a>`;
         }
 
-        let video = '';
-
         if(cols[9] && cols[9].startsWith('http')){
             video =
-            `<a href9]}
+            `${cols[9]}
                 📺 Video
             </a>`;
         }
 
-        let lyrics = '';
-
         if(cols[10] && cols[10].startsWith('http')){
             lyrics =
-            `${cols[10]} target="_blank"
-                class="action-link">
+            `${cols[10]}
                 📄 Lyrics
             </a>`;
         }
+
+        let songDisplay = cols[1] || '';
 
         tr.innerHTML = `
             <td>${cols[0] || ''}</td>
@@ -218,7 +193,6 @@ function renderTable(rows){
             <td>${cols[3] || ''}</td>
             <td>${cols[4] || ''}</td>
             <td>${cols[6] || ''}</td>
-            <td>${cols[7] || ''}</td>
             <td>${recording}</td>
             <td>${video}</td>
             <td>${lyrics}</td>
