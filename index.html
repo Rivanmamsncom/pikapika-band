@@ -136,35 +136,34 @@ function renderTable(rows){
 
         const tr = document.createElement('tr');
 
-tr.innerHTML = `
-    <td>${cols[0] || ''}</td>
+        let songLink = cols[1] || '';
 
-    <td>
-        ${cols[9]
-            ? `<a href="${cols[9]}" target="_blank" class="song-link">${cols[        }
-    </td>
+        if(cols[9]){
+            songLink = `${cols[9]}                          target="_blank"
+                          class="song-link">
+                          ${cols[1]}
+                        </a>`;
+        }
 
-    <td>${cols[2] || ''}</td>
-    <td>${cols[3] || ''}</td>
-    <td>${cols[4] || ''}</td>
-    <td>${cols[5] || ''}</td>
-    <td>${cols[6] || ''}</td>
-    <td>${cols[7] || ''}</td>
-    <td>${cols[8] || ''}</td>
-  <td>
-    ${cols[9]
-        ? `<a href="${cols[9]}": ''
-    }
-</td>
-    <td>${cols[10] || ''}</td>
-    <td>${cols[11] || ''}</td>
-`;
+        tr.innerHTML = `
+            <td>${cols[0] || ''}</td>
+            <td>${songLink}</td>
+            <td>${cols[2] || ''}</td>
+            <td>${cols[3] || ''}</td>
+            <td>${cols[4] || ''}</td>
+            <td>${cols[5] || ''}</td>
+            <td>${cols[6] || ''}</td>
+            <td>${cols[7] || ''}</td>
+            <td>${cols[8] || ''}</td>
+            <td>${cols[9] || ''}</td>
+            <td>${cols[10] || ''}</td>
+            <td>${cols[11] || ''}</td>
+        `;
 
         tbody.appendChild(tr);
 
     });
 }
-
 document.getElementById('search').addEventListener('input', function(){
 
     const search = this.value.toLowerCase();
