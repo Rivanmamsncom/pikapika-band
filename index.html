@@ -136,18 +136,15 @@ function renderTable(rows){
 
         const tr = document.createElement('tr');
 
-        let songLink = cols[1] || '';
+        let songName = cols[1] || '';
 
-        if(cols[9]){
-            songLink = `${cols[9]}                          target="_blank"
-                          class="song-link">
-                          ${cols[1]}
-                        </a>`;
+        if (cols[9]) {
+            songName = `9]}" target="_blank" class="song-link">${cols[1]}</a>`;
         }
 
         tr.innerHTML = `
             <td>${cols[0] || ''}</td>
-            <td>${songLink}</td>
+            <td>${songName}</td>
             <td>${cols[2] || ''}</td>
             <td>${cols[3] || ''}</td>
             <td>${cols[4] || ''}</td>
