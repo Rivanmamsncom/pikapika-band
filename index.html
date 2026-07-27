@@ -68,6 +68,11 @@ tr:hover{
 .action-link{
     text-decoration:none;
     font-weight:bold;
+    color:#7b1fa2;
+}
+
+.action-link:hover{
+    color:#ff6600;
 }
 
 </style>
@@ -102,7 +107,8 @@ tr:hover{
 </tr>
 </thead>
 
-<tbody id="songsBody"></tbody>
+<tbody id="songsBody">
+</tbody>
 
 </table>
 
@@ -146,24 +152,24 @@ function renderTable(rows){
         let video = '';
         let lyrics = '';
 
-        if(cols[8]){
+        if(cols[8] && cols[8].startsWith('http')){
             recording =
             `${cols[8]}
-               🎵 Recording
+                🎵 Recording
             </a>`;
         }
 
- if(cols[9]){
-    video = `
-    <a href="${cols[9]}"
-       target="_blank"
-       class="action-link
+        if(cols[9] && cols[9].startsWith('http')){
+            video =
+            `${cols[9]}
+                📺 Video
+            </a>`;
         }
 
-        if(cols[10]){
+        if(cols[10] && cols[10].startsWith('http')){
             lyrics =
             `${cols[10]}
-               📄 Lyrics
+                📄 Lyrics
             </a>`;
         }
 
