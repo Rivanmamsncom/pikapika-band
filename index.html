@@ -136,6 +136,10 @@ fetch('songs.csv')
     const rows = text.trim().split('\n');
 
     allRows = rows.slice(1).map(row => row.split(','));
+    console.log(allRows[0]);
+console.log(allRows[1]);
+console.log(allRows[2]);
+    
 
     renderTable(allRows);
 
