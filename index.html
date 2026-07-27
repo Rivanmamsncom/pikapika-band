@@ -4,21 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PIKA-PIKA ROCKUMBIO Song Catalog</title>
+<title>PIKA-PIKA ROCKUMBION - Canciones</title>
 
 <style>
 
 body{
+    font-family: Arial, sans-serif;
     background: linear-gradient(
         135deg,
         #ffde59,
         #ffb300,
         #ff6f00
     );
+    margin:0;
+    padding:10px;
 }
 
 h1{
     text-align:center;
+    color:#000;
 }
 
 #search{
@@ -32,7 +36,8 @@ h1{
 .table-container{
     overflow-x:auto;
     background:white;
-    border:1px solid #ddd;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
 table{
@@ -58,6 +63,11 @@ td{
 tr:nth-child(even){
     background:#f8f8f8;
 }
+
+tr:hover{
+    background:#fff3cd;
+}
+
 .song-link{
     text-decoration:none;
     color:#7b1fa2;
@@ -66,6 +76,11 @@ tr:nth-child(even){
 
 .song-link:hover{
     color:#ff6600;
+}
+
+.action-link{
+    text-decoration:none;
+    font-weight:bold;
 }
 
 </style>
@@ -91,9 +106,9 @@ tr:nth-child(even){
 <th>Language</th>
 <th>Suggested By</th>
 <th>Notes</th>
-<th>Recording Link</th>
-<th>Video Link</th>
-<th>Lyrics Link</th>
+<th>Recording</th>
+<th>Video</th>
+<th>Lyrics</th>
 <th>Votes</th>
 </tr>
 </thead>
@@ -121,9 +136,12 @@ fetch('songs.csv')
 
 })
 .catch(error => {
+
     console.error(error);
+
     document.getElementById('songsBody').innerHTML =
-        '<tr><td colspan="12">Unable to load songs.csv</td></tr>';
+    '<tr><td colspan="12">Unable to load songs.csv</td></tr>';
+
 });
 
 function renderTable(rows){
@@ -138,8 +156,35 @@ function renderTable(rows){
 
         let songName = cols[1] || '';
 
-        if (cols[9]) {
-            songName = `9]}" target="_blank" class="song-link">${cols[1]}</a>`;
+        if(cols[9]){
+            songName =
+            `${cols[9]}
+                ${cols[1]}
+            </a>`;
+        }
+
+        let recordingLink = '';
+        if(cols[8]){
+            recordingLink =
+            `<acols[8]}
+                🎵 Recording
+            </a>`;
+        }
+
+        let videoLink = '';
+        if(cols[9]){
+            videoLink =
+            `${cols[9]}
+                📺 Video
+            </a>`;
+        }
+
+        let lyricsLink = '';
+        if(cols[10]){
+            lyricsLink =
+            `<a ols[10]}
+                📄 Lyrics
+            </a>`;
         }
 
         tr.innerHTML = `
@@ -151,9 +196,9 @@ function renderTable(rows){
             <td>${cols[5] || ''}</td>
             <td>${cols[6] || ''}</td>
             <td>${cols[7] || ''}</td>
-            <td>${cols[8] || ''}</td>
-            <td>${cols[9] || ''}</td>
-            <td>${cols[10] || ''}</td>
+            <td>${recordingLink}</td>
+            <td>${videoLink}</td>
+            <td>${lyricsLink}</td>
             <td>${cols[11] || ''}</td>
         `;
 
@@ -161,6 +206,7 @@ function renderTable(rows){
 
     });
 }
+
 document.getElementById('search').addEventListener('input', function(){
 
     const search = this.value.toLowerCase();
