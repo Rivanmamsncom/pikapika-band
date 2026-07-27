@@ -58,6 +58,15 @@ td{
 tr:nth-child(even){
     background:#f8f8f8;
 }
+.song-link{
+    text-decoration:none;
+    color:#7b1fa2;
+    font-weight:bold;
+}
+
+.song-link:hover{
+    color:#ff6600;
+}
 
 </style>
 </head>
@@ -129,7 +138,9 @@ function renderTable(rows){
 
         tr.innerHTML = `
             <td>${cols[0] || ''}</td>
-            <td>${cols[1] || ''}</td>
+            <td>
+            ${cols[9]
+            ? `<a href="${cols[9]}" targettd>
             <td>${cols[2] || ''}</td>
             <td>${cols[3] || ''}</td>
             <td>${cols[4] || ''}</td>
