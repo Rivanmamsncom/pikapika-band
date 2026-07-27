@@ -22,6 +22,7 @@ body{
 
 h1{
     text-align:center;
+    margin-bottom:20px;
 }
 
 #search{
@@ -42,7 +43,6 @@ h1{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1200px;
 }
 
 th{
@@ -54,7 +54,6 @@ th{
 td{
     border:1px solid #ddd;
     padding:8px;
-    white-space:nowrap;
 }
 
 tr:nth-child(even){
@@ -62,17 +61,31 @@ tr:nth-child(even){
 }
 
 tr:hover{
-    background:#fff3cd;
+    background:#fff8d6;
+}
+
+.song-link{
+    text-decoration:none;
+    color:#7b1fa2;
+    font-weight:bold;
+}
+
+.song-link:hover{
+    color:#ff6600;
 }
 
 .action-link{
     text-decoration:none;
-    font-weight:bold;
-    color:#7b1fa2;
+    color:white;
+    background:#7b1fa2;
+    padding:5px 8px;
+    border-radius:6px;
+    font-size:12px;
+    display:inline-block;
 }
 
 .action-link:hover{
-    color:#ff6600;
+    background:#ff6600;
 }
 
 </style>
@@ -99,16 +112,14 @@ tr:hover{
 <th>Key</th>
 <th>Genre</th>
 <th>Artist</th>
-<th>Language</th>
 <th>Suggested By</th>
-<th>Recording</th>
-<th>Video</th>
-<th>Lyrics</th>
+<th>🎵 Recording</th>
+<th>📺 Video</th>
+<th>📄 Lyrics</th>
 </tr>
 </thead>
 
-<tbody id="songsBody">
-</tbody>
+<tbody id="songsBody"></tbody>
 
 </table>
 
@@ -134,7 +145,7 @@ fetch('songs.csv')
     console.error(error);
 
     document.getElementById('songsBody').innerHTML =
-        '<tr><td colspan="10">Unable to load songs.csv</td></tr>';
+    '<tr><td colspan="9">Unable to load songs.csv</td></tr>';
 
 });
 
@@ -148,9 +159,30 @@ function renderTable(rows){
 
         const tr = document.createElement('tr');
 
+        // CSV columns
+        // 0 #
+        // 1 Song
+        // 2 Key
+        // 3 Genre
+        // 4 Artist
+        // 5 Language
+        // 6 Suggested By
+        // 7 Notes
+        // 8 Recording Link
+        // 9 Video Link
+        // 10 Lyrics Link
+        // 11 Votes
+
+        let songDisplay = cols[1] || '';
+
+        if(cols[9] && cols[9].startsWith('http')){
+            songDisplay =
+            `${cols[9]}
+                ${cols[1]}
+            </a>`;
+        }
+
         let recording = '';
-        let video = '';
-        let lyrics = '';
 
         if(cols[8] && cols[8].startsWith('http')){
             recording =
@@ -159,12 +191,16 @@ function renderTable(rows){
             </a>`;
         }
 
+        let video = '';
+
         if(cols[9] && cols[9].startsWith('http')){
             video =
             `${cols[9]}
                 📺 Video
             </a>`;
         }
+
+        let lyrics = '';
 
         if(cols[10] && cols[10].startsWith('http')){
             lyrics =
@@ -175,11 +211,10 @@ function renderTable(rows){
 
         tr.innerHTML = `
             <td>${cols[0] || ''}</td>
-            <td>${cols[1] || ''}</td>
+            <td>${songDisplay}</td>
             <td>${cols[2] || ''}</td>
             <td>${cols[3] || ''}</td>
             <td>${cols[4] || ''}</td>
-            <td>${cols[5] || ''}</td>
             <td>${cols[6] || ''}</td>
             <td>${recording}</td>
             <td>${video}</td>
