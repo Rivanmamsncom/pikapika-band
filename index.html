@@ -186,7 +186,8 @@ function renderTable(rows){
 
         if(cols[8] && cols[8].startsWith('http')){
             recording =
-            `${cols[8]}
+            `${cols[8]}    target="_blank"
+            class="action-link">
                 🎵 Recording
             </a>`;
         }
@@ -195,7 +196,7 @@ function renderTable(rows){
 
         if(cols[9] && cols[9].startsWith('http')){
             video =
-            `${cols[9]}
+            `<a href9]}
                 📺 Video
             </a>`;
         }
@@ -204,7 +205,8 @@ function renderTable(rows){
 
         if(cols[10] && cols[10].startsWith('http')){
             lyrics =
-            `${cols[10]}
+            `${cols[10]} target="_blank"
+                class="action-link">
                 📄 Lyrics
             </a>`;
         }
