@@ -22,7 +22,6 @@ body{
 
 h1{
     text-align:center;
-    color:#000;
 }
 
 #search{
@@ -43,15 +42,13 @@ h1{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1400px;
+    min-width:1200px;
 }
 
 th{
     background:#7b1fa2;
     color:white;
     padding:10px;
-    position:sticky;
-    top:0;
 }
 
 td{
@@ -68,16 +65,6 @@ tr:hover{
     background:#fff3cd;
 }
 
-.song-link{
-    text-decoration:none;
-    color:#7b1fa2;
-    font-weight:bold;
-}
-
-.song-link:hover{
-    color:#ff6600;
-}
-
 .action-link{
     text-decoration:none;
     font-weight:bold;
@@ -90,7 +77,11 @@ tr:hover{
 
 <h1>🎸 PIKA-PIKA ROCKUMBION - Canciones</h1>
 
-<input type="text" id="search" placeholder="Search songs...">
+<input
+    type="text"
+    id="search"
+    placeholder="Search songs..."
+>
 
 <div class="table-container">
 
@@ -105,121 +96,5 @@ tr:hover{
 <th>Artist</th>
 <th>Language</th>
 <th>Suggested By</th>
-<th>Notes</th>
 <th>Recording</th>
 <th>Video</th>
-<th>Lyrics</th>
-<th>Votes</th>
-</tr>
-</thead>
-
-<tbody id="songsBody">
-</tbody>
-
-</table>
-
-</div>
-
-<script>
-
-let allRows = [];
-
-fetch('songs.csv')
-.then(response => response.text())
-.then(text => {
-
-    const rows = text.trim().split('\n');
-
-    allRows = rows.slice(1).map(row => row.split(','));
-
-    renderTable(allRows);
-
-})
-.catch(error => {
-
-    console.error(error);
-
-    document.getElementById('songsBody').innerHTML =
-    '<tr><td colspan="12">Unable to load songs.csv</td></tr>';
-
-});
-
-function renderTable(rows){
-
-    const tbody = document.getElementById('songsBody');
-
-    tbody.innerHTML = '';
-
-    rows.forEach(cols => {
-
-        const tr = document.createElement('tr');
-
-        let songName = cols[1] || '';
-
-        if(cols[9]){
-            songName =
-            `${cols[9]}
-                ${cols[1]}
-            </a>`;
-        }
-
-        let recordingLink = '';
-        if(cols[8]){
-            recordingLink =
-            `<acols[8]}
-                🎵 Recording
-            </a>`;
-        }
-
-        let videoLink = '';
-        if(cols[9]){
-            videoLink =
-            `${cols[9]}
-                📺 Video
-            </a>`;
-        }
-
-        let lyricsLink = '';
-        if(cols[10]){
-            lyricsLink =
-            `<a ols[10]}
-                📄 Lyrics
-            </a>`;
-        }
-
-        tr.innerHTML = `
-            <td>${cols[0] || ''}</td>
-            <td>${songName}</td>
-            <td>${cols[2] || ''}</td>
-            <td>${cols[3] || ''}</td>
-            <td>${cols[4] || ''}</td>
-            <td>${cols[5] || ''}</td>
-            <td>${cols[6] || ''}</td>
-            <td>${cols[7] || ''}</td>
-            <td>${recordingLink}</td>
-            <td>${videoLink}</td>
-            <td>${lyricsLink}</td>
-            <td>${cols[11] || ''}</td>
-        `;
-
-        tbody.appendChild(tr);
-
-    });
-}
-
-document.getElementById('search').addEventListener('input', function(){
-
-    const search = this.value.toLowerCase();
-
-    const filtered = allRows.filter(row =>
-        row.join(' ').toLowerCase().includes(search)
-    );
-
-    renderTable(filtered);
-
-});
-
-</script>
-
-</body>
-</html>
