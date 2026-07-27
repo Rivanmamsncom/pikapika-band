@@ -167,19 +167,17 @@ function renderTable(rows){
         let video = '';
         let lyrics = '';
 
-        if(cols[8] && cols[8].startsWith('http')){
-            recording =
-            `${cols[8]}
-                🎵 Recording
-            </a>`;
-        }
+if(cols[8] && cols[8].startsWith('http')){
+    recording =
+    `<a href="${cols    🎵 Recording
+    </a>`;
+}
 
-        if(cols[9] && cols[9].startsWith('http')){
-            video =
-            `${cols[9]}
-                📺 Video
-            </a>`;
-        }
+if(cols[9] && cols[9].startsWith('http')){
+    video =
+    `<a href="${cols[9]}"
+           </a>`;
+}
 
         if(cols[10] && cols[10].startsWith('http')){
             lyrics =
