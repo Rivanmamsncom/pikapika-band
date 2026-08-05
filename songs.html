@@ -112,7 +112,9 @@ tr:hover{
 <th>Key</th>
 <th>Genre</th>
 <th>Artist</th>
+<th>Language</th>
 <th>Suggested By</th>
+<th>Notes</th>
 <th>🎵 Recording</th>
 <th>📺 Video</th>
 <th>📄 Lyrics</th>
@@ -196,9 +198,10 @@ function renderTable(rows){
             '<td>' + (cols[3] || '') + '</td>' +
             '<td>' + (cols[4] || '') + '</td>' +
             '<td>' + (cols[6] || '') + '</td>' +
+            '<td>' + (cols[7] || '') + '</td>' +
             '<td>' + recording + '</td>' +
             '<td>' + video + '</td>' +
-            '<td>' + lyrics + '</td>'+
+            '<td>' + lyrics + '</td>'
              ;
 
         tbody.appendChild(tr);
