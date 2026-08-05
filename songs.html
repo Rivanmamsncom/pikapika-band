@@ -116,6 +116,7 @@ tr:hover{
 <th>🎵 Recording</th>
 <th>📺 Video</th>
 <th>📄 Lyrics</th>
+<th>Event</th>
 </tr>
 </thead>
 
@@ -198,7 +199,8 @@ function renderTable(rows){
             '<td>' + (cols[6] || '') + '</td>' +
             '<td>' + recording + '</td>' +
             '<td>' + video + '</td>' +
-            '<td>' + lyrics + '</td>';
+            '<td>' + lyrics + '</td>'+
+            '<td>' + (cols[11] || '') + '</td>' +;
 
         tbody.appendChild(tr);
 
