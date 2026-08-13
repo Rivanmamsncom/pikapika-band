@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PIKA-PIKA ROCKUMBION - Calendar</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(
+        135deg,
+        #ffde59,
+        #ffb300,
+        #ff6f00
+    );
+
+    margin:0;
+    padding:20px;
+}
+
+.home-button{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:#7b1fa2;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+}
+
+.home-button:hover{
+    background:#ff6600;
+}
+
+h1{
+    text-align:center;
+}
+
+#monthTitle{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    font-size:2rem;
+
+    font-weight:bold;
+}
+
+.calendar{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(150px,1fr));
+
+    gap:15px;
+
+}
+
+.day-card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.day-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.date{
+
+    font-size:1.5rem;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.green{
+    border-left:8px solid #00c853;
+}
+
+.red{
+    border-left:8px solid #d50000;
+}
+
+.orange{
+    border-left:8px solid #ff9800;
+}
+
+.gray{
+    border-left:8px solid #888;
+}
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.7);
+
+}
+
+.modal-content{
+
+    background:white;
+
+    width:90%;
+
+    max-width:600px;
+
+    margin:50px auto;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    color:black;
+
+}
+
+.close{
+
+    float:right;
+
+    cursor:pointer;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="home-button">
+🏠 HOME
+</a>
+
+<a href="songs.html" class="home-button">
+🎵 SONG LIST
+</a>
+
+<h1>📅 ROCKUMBION CALENDAR</h1>
+
+<div id="monthTitle"></div>
+
+<div id="calendar" class="calendar"></div>
+
+<div id="modal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeModal()">
+            ×
+        </span>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+fetch('calendar.csv')
+.then(response => response.text())
+.then(text => {
+
+    const rows = text.trim().split('\n');
+
+    const titleRow = rows[0].split(',');
+
+    const year =
+        titleRow[1]
+        ? titleRow[1].trim()
+        : '';
+
+    const month =
+        titleRow[2]
+        ? titleRow[2].trim()
+        : '';
+
+    document.getElementById('monthTitle')
+        .innerText = month + ' ' + year;
+
+    const headers =
+        rows[1].split(',');
+
+    const data =
+        rows.slice(2);
+
+    const calendar =
+        document.getElementById('calendar');
+
+    data.forEach(row => {
+
+        if(row.trim() === '') return;
+
+        const cols =
+            row.split(',');
+
+        const date =
+            cols[0] || '';
+
+        const day =
+            cols[1] || '';
+
+        let available = 0;
+        let unavailable = 0;
+        let maybe = 0;
+
+        let people = [];
+
+        for(let i=2;i<cols.length;i++){
+
+            const value =
+                (cols[i] || '').trim();
+
+            const person =
+                headers[i] || '';
+
+            if(value === "DISPONIBLE"){
+
+                available++;
+
+                people.push(
+                    "✅ " + person
+                );
+
+            }
+
+            else if(
+                value === "NO DISP."
+            ){
+
+                unavailable++;
+
+                people.push(
+                    "❌ " + person
+                );
+
+            }
+
+            else if(
+                value === "ME LA PELAN"
+            ){
+
+                maybe++;
+
+                people.push(
+                    "🟠 " + person
+                );
+
+            }
+
+        }
+
+        let cardColor = 'gray';
+
+        if(available > 0)
+            cardColor = 'green';
+
+        else if(unavailable > 0)
+            cardColor = 'red';
+
+        else if(maybe > 0)
+            cardColor = 'orange';
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            'day-card ' +
+            cardColor;
+
+        card.innerHTML =
+
+            '<div class="date">' +
+            date +
+            '</div>' +
+
+            '<div>' +
+            day +
+            '</div>' +
+
+            '<hr>' +
+
+            '✅ ' + available +
+            '<br>' +
+
+            '❌ ' + unavailable +
+            '<br>' +
+
+            '🟠 ' + maybe;
+
+        card.onclick =
+            function(){
+
+                openModal(
+                    date,
+                    day,
+                    people
+                );
+
+            };
+
+        calendar.appendChild(card);
+
+    });
+
+});
+
+function openModal(
+    date,
+    day,
+    people
+){
+
+    document
+        .getElementById('modal')
+        .style.display =
+        'block';
+
+    document
+        .getElementById('modalContent')
+        .innerHTML =
+
+        '<h2>' +
+        date +
+        ' - ' +
+        day +
+        '</h2>' +
+
+        '<hr>' +
+
+        people.join('<br>');
+
+}
+
+function closeModal(){
+
+    document
+        .getElementById('modal')
+        .style.display =
+        'none';
+
+}
+
+</script>
+
+</body>
+
+</html>
