@@ -102,6 +102,35 @@ h1{
 
     margin-bottom:10px;
 }
+    .day{
+
+    font-size:.85rem;
+
+    color:#444;
+
+}
+
+.event-type{
+
+    font-size:.80rem;
+
+    font-weight:bold;
+
+    color:#7b1fa2;
+
+    margin-top:8px;
+
+}
+
+.event-name{
+
+    font-size:.95rem;
+
+    font-weight:bold;
+
+    margin-bottom:8px;
+
+}
 
 .green{
     border-left:8px solid #00c853;
@@ -164,6 +193,7 @@ h1{
     font-weight:bold;
 
 }
+    
 
 </style>
 
@@ -315,35 +345,35 @@ for(let i=4;i<cols.length;i++){
             'day-card ' +
             cardColor;
 
+
+
 card.innerHTML =
 
     '<div class="date">' +
     date +
     '</div>' +
 
-    '<div>' +
+    '<div class="day">' +
     day +
     '</div>' +
 
-    '<br>' +
-
-    '<strong>' +
+    '<div class="event-type">' +
     eventType +
-    '</strong>' +
+    '</div>' +
 
+    '<div class="event-name">' +
+    eventName +
+    '</div>' +
+
+    '<hr>' +
+
+    '✅ ' + available +
     '<br>' +
 
-    eventName +
+    '❌ ' + unavailable +
+    '<br>' +
 
-            '<hr>' +
-
-            '✅ ' + available +
-            '<br>' +
-
-            '❌ ' + unavailable +
-            '<br>' +
-
-            '🟠 ' + maybe;
+    '🟠 ' + maybe;
 
         card.onclick =
             function(){
@@ -351,7 +381,9 @@ card.innerHTML =
                 openModal(
                     date,
                     day,
-                    people
+                    people,
+                    eventType,
+                    eventName
                 );
 
             };
@@ -365,7 +397,9 @@ card.innerHTML =
 function openModal(
     date,
     day,
-    people
+    people,
+    eventType,
+    eventName
 ){
 
     document
