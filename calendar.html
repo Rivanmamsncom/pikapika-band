@@ -250,7 +250,10 @@ fetch('calendar.csv')
 
         let people = [];
 
-        for(let i=2;i<cols.length;i++){
+      const eventType = cols[2] || '';
+const eventName = cols[3] || '';
+
+for(let i=4;i<cols.length;i++){
 
             const value =
                 (cols[i] || '').trim();
@@ -312,15 +315,25 @@ fetch('calendar.csv')
             'day-card ' +
             cardColor;
 
-        card.innerHTML =
+card.innerHTML =
 
-            '<div class="date">' +
-            date +
-            '</div>' +
+    '<div class="date">' +
+    date +
+    '</div>' +
 
-            '<div>' +
-            day +
-            '</div>' +
+    '<div>' +
+    day +
+    '</div>' +
+
+    '<br>' +
+
+    '<strong>' +
+    eventType +
+    '</strong>' +
+
+    '<br>' +
+
+    eventName +
 
             '<hr>' +
 
@@ -364,11 +377,19 @@ function openModal(
         .getElementById('modalContent')
         .innerHTML =
 
-        '<h2>' +
-        date +
-        ' - ' +
-        day +
-        '</h2>' +
+'<h2>' +
+date +
+' - ' +
+day +
+'</h2>' +
+
+'<h3>' +
+eventType +
+'</h3>' +
+
+'<p>' +
+eventName +
+'</p>' +
 
         '<hr>' +
 
