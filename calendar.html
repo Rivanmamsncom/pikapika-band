@@ -101,6 +101,13 @@ h1{
 
     color:black;
 
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+    transition:.3s;
+
 }
 
 .day-card:hover{
@@ -144,6 +151,30 @@ h1{
     font-weight:bold;
 
     margin-bottom:8px;
+
+}
+
+.calendar-wrapper{
+
+    overflow-x:auto;
+
+}
+
+.weekdays,
+.calendar{
+
+    min-width:900px;
+
+}
+
+@media(max-width:768px){
+
+    .weekdays,
+    .calendar{
+
+        min-width:700px;
+
+    }
 
 }
 
@@ -227,6 +258,7 @@ h1{
 <h1>📅 ROCKUMBION CALENDAR</h1>
 
 <div id="monthTitle"></div>
+    <div class="calendar-wrapper">
     <div class="weekdays">
 
     <div>SUN</div>
@@ -240,6 +272,7 @@ h1{
 </div>
 
 <div id="calendar" class="calendar"></div>
+ </div>
 
 <div id="modal" class="modal">
 
@@ -288,8 +321,14 @@ fetch('calendar.csv')
         document.getElementById('calendar');
     for(let i=0;i<6;i++){
 
+   for(let i=0;i<6;i++){
+
     const blank =
         document.createElement('div');
+
+    blank.className = 'day-card';
+
+    blank.style.visibility = 'hidden';
 
     calendar.appendChild(blank);
 
