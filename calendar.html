@@ -179,19 +179,35 @@ h1{
 }
 
 .green{
-    border-left:8px solid #00c853;
-}
 
-.red{
-    border-left:8px solid #d50000;
+    background:#d4edda;
+
+    border:2px solid #28a745;
+
 }
 
 .orange{
-    border-left:8px solid #ff9800;
+
+    background:#fff3cd;
+
+    border:2px solid #ffc107;
+
+}
+
+.red{
+
+    background:#f8d7da;
+
+    border:2px solid #dc3545;
+
 }
 
 .gray{
-    border-left:8px solid #888;
+
+    background:#f0f0f0;
+
+    border:2px solid #888;
+
 }
 
 .modal{
@@ -400,16 +416,35 @@ for(let i=4;i<cols.length;i++){
 
         }
 
-        let cardColor = 'gray';
+ let totalResponses =
+    available +
+    unavailable +
+    maybe;
 
-        if(available > 0)
-            cardColor = 'green';
+let cardColor = 'gray';
 
-        else if(unavailable > 0)
-            cardColor = 'red';
+if(totalResponses > 0){
 
-        else if(maybe > 0)
-            cardColor = 'orange';
+    let availabilityPct =
+        (available / totalResponses) * 100;
+
+    if(availabilityPct >= 80){
+
+        cardColor = 'green';
+
+    }
+    else if(availabilityPct >= 50){
+
+        cardColor = 'orange';
+
+    }
+    else{
+
+        cardColor = 'red';
+
+    }
+
+}
 
         const card =
             document.createElement('div');
