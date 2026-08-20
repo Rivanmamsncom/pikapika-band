@@ -1,2 +1,2 @@
 # pikapika-band
-Pika-Pika Rocumbion
+Pika-Pika Rockumbion
