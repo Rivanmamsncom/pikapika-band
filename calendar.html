@@ -555,24 +555,45 @@ function openModal(
     }
     else{
 
-        document.getElementById(
-            "modalContent"
-        ).innerHTML =
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
 
-        `
-        <h2>No Event</h2>
+    `
+    <h2>Create Event</h2>
 
-        <p>
-        ${dateString}
-        </p>
+    <p>Date: ${dateString}</p>
 
-        <p>
-        Event creation will be added next.
-        </p>
-        `;
+    <input
+        id="newTitle"
+        placeholder="Event Title"
+        style="width:100%;padding:10px;margin-bottom:10px;">
 
-    }
+    <input
+        id="newLocation"
+        placeholder="Location"
+        style="width:100%;padding:10px;margin-bottom:10px;">
 
+    <input
+        id="newTime"
+        type="time"
+        style="width:100%;padding:10px;margin-bottom:10px;">
+
+    <textarea
+        id="newNotes"
+        placeholder="Notes"
+        style="width:100%;padding:10px;height:100px;">
+    </textarea>
+
+    <br><br>
+
+    <button
+        onclick="saveEvent('${dateString}')">
+        Save Event
+    </button>
+    `;
+
+}
 }
 
 function closeModal(){
@@ -583,7 +604,58 @@ function closeModal(){
     "none";
 
 }
+async function saveEvent(dateString){
 
+    const title =
+        document.getElementById(
+            "newTitle"
+        ).value;
+
+    const location =
+        document.getElementById(
+            "newLocation"
+        ).value;
+
+    const time =
+        document.getElementById(
+            "newTime"
+        ).value;
+
+    const notes =
+        document.getElementById(
+            "newNotes"
+        ).value;
+
+    const { error } =
+        await client
+            .from("events")
+            .insert([
+            {
+                title: title,
+                location: location,
+                event_date: dateString,
+                event_time: time,
+                notes: notes
+            }
+        ]);
+
+    if(error){
+
+        alert(
+            "Error saving event"
+        );
+
+        console.error(error);
+
+        return;
+
+    }
+
+    closeModal();
+
+    await loadEvents();
+
+}
 function nextMonth(){
 
     currentDate.setMonth(
