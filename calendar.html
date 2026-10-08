@@ -308,6 +308,39 @@ h1{
     
 <script>
 
+    const SUPABASE_URL =
+"https://nkbuswwxvcsbwfpfvena.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rGy22khfvjVl7fHx2OnePg_ngX4lR23";
+
+const client =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function testSupabase() {
+
+    const { data, error } =
+        await client
+            .from('events')
+            .select('*');
+
+    if(error){
+        console.error(error);
+    }
+    else{
+        console.log(
+            "Supabase Events:",
+            data
+        );
+    }
+}
+
+testSupabase();
+`
+
 fetch('calendar.csv')
 .then(response => response.text())
 .then(text => {
