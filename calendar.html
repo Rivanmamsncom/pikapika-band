@@ -343,9 +343,16 @@ console.log(
 data[0].title,
 data[0].location
        );
-    }
+document.getElementById("monthTitle").innerHTML =
+data[0].title +
+" @ " +
+data[0].location;
+ 
 }
-}   
+ 
+}
+ 
+}  
 
 testSupabase();
 
