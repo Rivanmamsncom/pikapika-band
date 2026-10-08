@@ -528,31 +528,77 @@ function openModal(
 
     if(event){
 
-        document.getElementById(
-            "modalContent"
-        ).innerHTML =
+    loadAvailability(event.id);
 
-        `
-        <h2>${event.title}</h2>
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
 
-        <p>
-        📍 ${event.location}
-        </p>
+    `
+    <h2>${event.title}</h2>
 
-        <p>
-        📅 ${event.event_date}
-        </p>
+    <p>
+    📍 ${event.location}
+    </p>
 
-        <p>
-        🕒 ${event.event_time}
-        </p>
+    <p>
+    📅 ${event.event_date}
+    </p>
 
-        <p>
-        ${event.notes || ""}
-        </p>
-        `;
+    <p>
+    🕒 ${event.event_time}
+    </p>
 
-    }
+    <p>
+    ${event.notes || ""}
+    </p>
+
+    <hr>
+
+    <h3>Your Availability</h3>
+
+    <select
+        id="memberSelect"
+        style="width:100%;padding:10px;margin-bottom:10px;">
+    </select>
+
+    <select
+        id="statusSelect"
+        style="width:100%;padding:10px;margin-bottom:15px;">
+
+        <option value="Available">
+            ✅ Available
+        </option>
+
+        <option value="Maybe">
+            🟠 Maybe
+        </option>
+
+        <option value="Not Available">
+            ❌ Not Available
+        </option>
+
+    </select>
+
+    <button
+        onclick="saveAvailability('${event.id}')">
+
+        Save Availability
+
+    </button>
+
+    <hr>
+
+    <div id="availabilityList">
+
+        Loading...
+
+    </div>
+    `;
+
+    loadMembers();
+
+}
     else{
 
     document.getElementById(
@@ -675,8 +721,52 @@ function previousMonth(){
     renderCalendar();
 
 }
+async function loadMembers(){
 
+    const { data, error } =
+        await client
+            .from("members")
+            .select("*")
+            .order("name");
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const dropdown =
+        document.getElementById(
+            "memberSelect"
+        );
+
+    dropdown.innerHTML = "";
+
+    data.forEach(member => {
+
+        dropdown.innerHTML +=
+
+        `
+        <option value="${member.name}">
+            ${member.name}
+        </option>
+        `;
+
+    });
+
+}
+    async function loadAvailability(eventId){
+ 
+console.log(
+"Loading availability for",
+eventId
+);
+ 
+}
+ 
 loadEvents();
+
 
 </script>
 </body>
