@@ -336,10 +336,13 @@ async function testSupabase() {
         data
     );
 
-    document.getElementById("monthTitle").innerHTML =
-        data[0].title +
-        " @ " +
-        data[0].location;
+ if(data.length > 0){
+ 
+console.log(
+"First Event:",
+data[0].title,
+data[0].location
+        );
     }
 }   
 
