@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Test</title>
+</head>
+<body>
+
+<h1>Supabase Connection Test</h1>
+
+<script src="https://cdn/npm/@supabase/supabase-js@2script>
+
+<script>
+
+const SUPABASE_URL =
+"https://nkbuswwxvcsbwfpfvena.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rGy22khfvjVl7fHx2OnePg_ngX4lR23";
+
+const client =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function test() {
+
+    const { data, error } =
+        await client
+            .from('members')
+            .select('*');
+
+    if(error){
+        document.body.innerHTML +=
+            '<h2 style="color:red;">ERROR</h2><pre>' +
+            JSON.stringify(error, null, 2) +
+            '</pre>';
+    }
+    else{
+        document.body.innerHTML +=
+            '<h2 style="color:green;">SUCCESS</h2><pre>' +
+            JSON.stringify(data, null, 2) +
+            '</pre>';
+    }
+}
+
+test();
+
+</script>
+
+</body>
+</html>
