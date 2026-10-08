@@ -1,1 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PIKA-PIKA ROCKUMBION - Calendar</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(
+        135deg,
+        #ffde59,
+        #ffb300,
+        #ff6f00
+    );
+
+    margin:0;
+    padding:20px;
+}
+
+.home-button{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:#7b1fa2;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+}
+
+.home-button:hover{
+    background:#ff6600;
+}
+
+h1{
+    text-align:center;
+}
+
+#monthTitle{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    font-size:2rem;
+
+    font-weight:bold;
+}
+
+.weekdays{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    gap:10px;
+
+    margin-bottom:10px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+}
+
+.calendar{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    gap:10px;
+
+}
+
+.day-card{
+
+    background:white;
+
+    border-radius:10px;
+
+    min-height:130px;
+
+    padding:10px;
+
+    color:black;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.day-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.date{
+
+    font-size:1.5rem;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+    .day{
+
+    font-size:.85rem;
+
+    color:#444;
+
+}
+
+.event-type{
+
+    font-size:.80rem;
+
+    font-weight:bold;
+
+    color:#7b1fa2;
+
+    margin-top:8px;
+
+}
+
+.event-name{
+
+    font-size:.95rem;
+
+    font-weight:bold;
+
+    margin-bottom:8px;
+
+}
+
+.calendar-wrapper{
+
+    overflow-x:auto;
+
+}
+
+.weekdays,
+.calendar{
+
+    min-width:900px;
+
+}
+
+@media(max-width:768px){
+
+    .weekdays,
+    .calendar{
+
+        min-width:700px;
+
+    }
+
+}
+
+.green{
+
+    background:#d4edda;
+
+    border:2px solid #28a745;
+
+}
+
+.orange{
+
+    background:#fff3cd;
+
+    border:2px solid #ffc107;
+
+}
+
+.red{
+
+    background:#f8d7da;
+
+    border:2px solid #dc3545;
+
+}
+
+.gray{
+
+    background:#f0f0f0;
+
+    border:2px solid #888;
+
+}
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.7);
+
+}
+
+.modal-content{
+
+    background:white;
+
+    width:90%;
+
+    max-width:600px;
+
+    margin:50px auto;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    color:black;
+
+}
+
+.close{
+
+    float:right;
+
+    cursor:pointer;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+    
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="home-button">
+🏠 HOME
+</a>
+
+<a href="songs.html" class="home-button">
+🎵 SONG LIST
+</a>
+
+<h1>📅 ROCKUMBION CALENDAR</h1>
+
+<div id="monthTitle"></div>
+    <div class="calendar-wrapper">
+    <div class="weekdays">
+
+    <div>SUN</div>
+    <div>MON</div>
+    <div>TUE</div>
+    <div>WED</div>
+    <div>THU</div>
+    <div>FRI</div>
+    <div>SAT</div>
+
+</div>
+
+<div id="calendar" class="calendar"></div>
+ </div>
+
+<div id="modal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeModal()">
+            ×
+        </span>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+fetch('calendar.csv')
+.then(response => response.text())
+.then(text => {
+
+    const rows = text.trim().split('\n');
+
+    const titleRow = rows[0].split(',');
+
+    const year =
+        titleRow[1]
+        ? titleRow[1].trim()
+        : '';
+
+    const month =
+        titleRow[2]
+        ? titleRow[2].trim()
+        : '';
+
+    document.getElementById('monthTitle')
+        .innerText = month + ' ' + year;
+
+    const headers =
+        rows[1].split(',');
+
+    const data =
+        rows.slice(2);
+
+    const calendar =
+        document.getElementById('calendar');
+  
+
+   for(let i=0;i<6;i++){
+
+    const blank =
+        document.createElement('div');
+
+    blank.className = 'day-card';
+
+    blank.style.visibility = 'hidden';
+
+    calendar.appendChild(blank);
+
+}
+
+    data.forEach(row => {
+
+        if(row.trim() === '') return;
+
+        const cols =
+            row.split(',');
+
+        const date =
+            cols[0] || '';
+
+        const day =
+            cols[1] || '';
+
+        let available = 0;
+        let unavailable = 0;
+        let maybe = 0;
+
+        let people = [];
+
+      const eventType = cols[2] || '';
+const eventName = cols[3] || '';
+
+for(let i=4;i<cols.length;i++){
+
+            const value =
+                (cols[i] || '').trim();
+
+            const person =
+                headers[i] || '';
+
+            if(value === "DISPONIBLE"){
+
+                available++;
+
+                people.push(
+                    "✅Disponible " + person
+                );
+
+            }
+
+            else if(
+                value === "ME LA PELAN"
+            ){
+
+                unavailable++;
+
+                people.push(
+                    "❌ Me La Pelan " + person
+                );
+
+            }
+
+            else if(
+                value === "TALVES"
+            ){
+
+                maybe++;
+
+                people.push(
+                    "🟠 Ruegame Perro " + person
+                );
+
+            }
+
+        }
+
+ let totalResponses =
+    available +
+    unavailable +
+    maybe;
+
+let cardColor = 'gray';
+
+if(totalResponses > 0){
+
+    let availabilityPct =
+        (available / totalResponses) * 100;
+
+    if(availabilityPct >= 80){
+
+        cardColor = 'green';
+
+    }
+    else if(availabilityPct >= 50){
+
+        cardColor = 'orange';
+
+    }
+    else{
+
+        cardColor = 'red';
+
+    }
+
+}
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            'day-card ' +
+            cardColor;
+
+
+
+card.innerHTML =
+
+    '<div class="date">' +
+    date +
+    '</div>' +
+
+    '<div class="day">' +
+    day +
+    '</div>' +
+
+    '<div class="event-type">' +
+    eventType +
+    '</div>' +
+
+    '<div class="event-name">' +
+    eventName +
+    '</div>' +
+
+    '<hr>' +
+
+    '✅ Disponibles ' + available +
+    '<br>' +
+
+    '❌ A la Versh ' + unavailable +
+    '<br>' +
+
+    '🟠 Rueguenme Puñales ' + maybe;
+
+        card.onclick =
+            function(){
+
+                openModal(
+                    date,
+                    day,
+                    people,
+                    eventType,
+                    eventName
+                );
+
+            };
+
+        calendar.appendChild(card);
+
+    });
+
+});
+
+function openModal(
+    date,
+    day,
+    people,
+    eventType,
+    eventName
+){
+
+    document
+        .getElementById('modal')
+        .style.display =
+        'block';
+
+    document
+        .getElementById('modalContent')
+        .innerHTML =
+
+'<h2>' +
+date +
+' - ' +
+day +
+'</h2>' +
+
+'<h3>' +
+eventType +
+'</h3>' +
+
+'<p>' +
+eventName +
+'</p>' +
+
+        '<hr>' +
+
+        people.join('<br>');
+
+}
+
+function closeModal(){
+
+    document
+        .getElementById('modal')
+        .style.display =
+        'none';
+
+}
+
+</script>
+
+</body>
+
+</html>
 
