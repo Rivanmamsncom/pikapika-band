@@ -12,7 +12,33 @@
 
 <script>
 
-alert(typeof window.supabase);
+const SUPABASE_URL =
+"https://nkbuswwxvcsbwfpfvena.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rGy22khfvjVl7fHx2OnePg_ngX4lR23";
+
+const client =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function test() {
+
+    const { data, error } =
+        await client
+            .from('members')
+            .select('*');
+
+    if (error) {
+        alert("ERROR: " + error.message);
+    } else {
+        alert("SUCCESS: Found " + data.length + " members");
+    }
+}
+
+test();
 
 </script>
 
