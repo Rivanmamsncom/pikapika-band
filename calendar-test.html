@@ -28,13 +28,13 @@ async function test() {
 
     const { data, error } =
         await client
-            .from('members')
+            .from('events')
             .select('*');
 
     if (error) {
         alert("ERROR: " + error.message);
     } else {
-        alert("SUCCESS: Found " + data.length + " members");
+        alert("SUCCESS: Found " + data.length + " events");
     }
 }
 
