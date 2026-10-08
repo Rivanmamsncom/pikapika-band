@@ -756,13 +756,47 @@ async function loadMembers(){
     });
 
 }
-    async function loadAvailability(eventId){
- 
-console.log(
-"Loading availability for",
-eventId
-);
- 
+ async function loadAvailability(eventId){
+
+    const { data, error } =
+        await client
+            .from("availability")
+            .select("*")
+            .eq("event_id", eventId);
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    let html = "<h3>Responses</h3>";
+
+    data.forEach(item => {
+
+        html += `
+            <div>
+                ${item.member_name}
+                :
+                ${item.status}
+            </div>
+        `;
+
+    });
+
+    const container =
+        document.getElementById(
+            "availabilityList"
+        );
+
+    if(container){
+
+        container.innerHTML =
+            html;
+
+    }
+
 }
  
 loadEvents();
