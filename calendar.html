@@ -330,12 +330,16 @@ async function testSupabase() {
     if(error){
         console.error(error);
     }
-    else{
-        console.log(
-            "Supabase Events:",
-            data
-        );
-    }
+   else{
+    console.log(
+        "Supabase Events:",
+        data
+    );
+
+    document.getElementById("monthTitle").innerHTML =
+        data[0].title +
+        " @ " +
+        data[0].location;
 }
 
 testSupabase();
