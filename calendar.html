@@ -51,8 +51,7 @@ h1{
 }
 
 #monthTitle{
-
-    text-align:center;
+        text-align:center;
 
     margin-bottom:30px;
 
@@ -60,6 +59,39 @@ h1{
 
     font-weight:bold;
 }
+    .calendar-header{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:20px;
+
+}
+
+.calendar-header button{
+
+    padding:10px 15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#7b1fa2;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+
 
 .weekdays{
 
@@ -273,22 +305,37 @@ h1{
 
 <h1>📅 ROCKUMBION CALENDAR</h1>
 
-<div id="monthTitle"></div>
-    <div class="calendar-wrapper">
-    <div class="weekdays">
+<div class="calendar-header">
 
-    <div>SUN</div>
-    <div>MON</div>
-    <div>TUE</div>
-    <div>WED</div>
-    <div>THU</div>
-    <div>FRI</div>
-    <div>SAT</div>
+    <button onclick="previousMonth()">
+        ◀
+    </button>
+
+    <div id="monthTitle"></div>
+
+    <button onclick="nextMonth()">
+        ▶
+    </button>
 
 </div>
 
-<div id="calendar" class="calendar"></div>
- </div>
+<div class="calendar-wrapper">
+
+    <div class="weekdays">
+
+        <div>SUN</div>
+        <div>MON</div>
+        <div>TUE</div>
+        <div>WED</div>
+        <div>THU</div>
+        <div>FRI</div>
+        <div>SAT</div>
+
+    </div>
+
+    <div id="calendar" class="calendar"></div>
+
+</div>
 
 <div id="modal" class="modal">
 
@@ -308,7 +355,7 @@ h1{
     
 <script>
 
-    const SUPABASE_URL =
+const SUPABASE_URL =
 "https://nkbuswwxvcsbwfpfvena.supabase.co";
 
 const SUPABASE_KEY =
@@ -320,7 +367,12 @@ supabase.createClient(
     SUPABASE_KEY
 );
 
-async function testSupabase() {
+let currentDate =
+new Date();
+
+let allEvents = [];
+
+async function loadEvents(){
 
     const { data, error } =
         await client
@@ -328,279 +380,233 @@ async function testSupabase() {
             .select('*');
 
     if(error){
+
         console.error(error);
+        return;
+
     }
-   else{
-    console.log(
-        "Supabase Events:",
-        data
-    );
 
- if(data.length > 0){
- 
-console.log(
-"First Event:",
-data[0].title,
-data[0].location
-       );
-document.getElementById("monthTitle").innerHTML =
-data[0].title +
-" @ " +
-data[0].location;
- 
+    allEvents = data || [];
+
+    renderCalendar();
+
 }
- 
-}
- 
-}  
 
-testSupabase();
-
-
-fetch('calendar.csv')
-.then(response => response.text())
-.then(text => {
-
-    const rows = text.trim().split('\n');
-
-    const titleRow = rows[0].split(',');
-
-    const year =
-        titleRow[1]
-        ? titleRow[1].trim()
-        : '';
-
-    const month =
-        titleRow[2]
-        ? titleRow[2].trim()
-        : '';
-
-    document.getElementById('monthTitle')
-        .innerText = month + ' ' + year;
-
-    const headers =
-        rows[1].split(',');
-
-    const data =
-        rows.slice(2);
+function renderCalendar(){
 
     const calendar =
-        document.getElementById('calendar');
-  
+        document.getElementById(
+            "calendar"
+        );
 
-   for(let i=0;i<6;i++){
+    calendar.innerHTML = "";
 
-    const blank =
-        document.createElement('div');
+    const year =
+        currentDate.getFullYear();
 
-    blank.className = 'day-card';
+    const month =
+        currentDate.getMonth();
 
-    blank.style.visibility = 'hidden';
+    document.getElementById(
+        "monthTitle"
+    ).innerHTML =
 
-    calendar.appendChild(blank);
-
-}
-
-    data.forEach(row => {
-
-        if(row.trim() === '') return;
-
-        const cols =
-            row.split(',');
-
-        const date =
-            cols[0] || '';
-
-        const day =
-            cols[1] || '';
-
-        let available = 0;
-        let unavailable = 0;
-        let maybe = 0;
-
-        let people = [];
-
-      const eventType = cols[2] || '';
-const eventName = cols[3] || '';
-
-for(let i=4;i<cols.length;i++){
-
-            const value =
-                (cols[i] || '').trim();
-
-            const person =
-                headers[i] || '';
-
-            if(value === "DISPONIBLE"){
-
-                available++;
-
-                people.push(
-                    "✅Disponible " + person
-                );
-
+        currentDate.toLocaleString(
+            "default",
+            {
+                month:"long",
+                year:"numeric"
             }
+        );
 
-            else if(
-                value === "ME LA PELAN"
-            ){
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
 
-                unavailable++;
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
 
-                people.push(
-                    "❌ Me La Pelan " + person
-                );
+    for(
+        let i = 0;
+        i < firstDay;
+        i++
+    ){
 
-            }
+        const blank =
+            document.createElement(
+                "div"
+            );
 
-            else if(
-                value === "TALVES"
-            ){
+        blank.className =
+            "day-card";
 
-                maybe++;
+        blank.style.visibility =
+            "hidden";
 
-                people.push(
-                    "🟠 Ruegame Perro " + person
-                );
+        calendar.appendChild(
+            blank
+        );
 
-            }
+    }
+
+    for(
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ){
+
+        const dateString =
+            `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+        const event =
+            allEvents.find(
+                e =>
+                e.event_date ===
+                dateString
+            );
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "day-card";
+
+        let content =
+
+            `<div class="date">${day}</div>`;
+
+        if(event){
+
+            content +=
+
+            `<div class="event-type">
+                ${event.title}
+            </div>
+
+            <div class="event-name">
+                ${event.location}
+            </div>`;
 
         }
 
- let totalResponses =
-    available +
-    unavailable +
-    maybe;
+        card.innerHTML =
+            content;
 
-let cardColor = 'gray';
+        card.onclick =
+            () =>
+            openModal(
+                event,
+                dateString
+            );
 
-if(totalResponses > 0){
-
-    let availabilityPct =
-        (available / totalResponses) * 100;
-
-    if(availabilityPct >= 80){
-
-        cardColor = 'green';
+        calendar.appendChild(
+            card
+        );
 
     }
-    else if(availabilityPct >= 50){
 
-        cardColor = 'orange';
+}
+
+function openModal(
+    event,
+    dateString
+){
+
+    document.getElementById(
+        "modal"
+    ).style.display =
+    "block";
+
+    if(event){
+
+        document.getElementById(
+            "modalContent"
+        ).innerHTML =
+
+        `
+        <h2>${event.title}</h2>
+
+        <p>
+        📍 ${event.location}
+        </p>
+
+        <p>
+        📅 ${event.event_date}
+        </p>
+
+        <p>
+        🕒 ${event.event_time}
+        </p>
+
+        <p>
+        ${event.notes || ""}
+        </p>
+        `;
 
     }
     else{
 
-        cardColor = 'red';
+        document.getElementById(
+            "modalContent"
+        ).innerHTML =
+
+        `
+        <h2>No Event</h2>
+
+        <p>
+        ${dateString}
+        </p>
+
+        <p>
+        Event creation will be added next.
+        </p>
+        `;
 
     }
-
-}
-
-        const card =
-            document.createElement('div');
-
-        card.className =
-            'day-card ' +
-            cardColor;
-
-
-
-card.innerHTML =
-
-    '<div class="date">' +
-    date +
-    '</div>' +
-
-    '<div class="day">' +
-    day +
-    '</div>' +
-
-    '<div class="event-type">' +
-    eventType +
-    '</div>' +
-
-    '<div class="event-name">' +
-    eventName +
-    '</div>' +
-
-    '<hr>' +
-
-    '✅ Disponibles ' + available +
-    '<br>' +
-
-    '❌ A la Versh ' + unavailable +
-    '<br>' +
-
-    '🟠 Rueguenme Puñales ' + maybe;
-
-        card.onclick =
-            function(){
-
-                openModal(
-                    date,
-                    day,
-                    people,
-                    eventType,
-                    eventName
-                );
-
-            };
-
-        calendar.appendChild(card);
-
-    });
-
-});
-
-function openModal(
-    date,
-    day,
-    people,
-    eventType,
-    eventName
-){
-
-    document
-        .getElementById('modal')
-        .style.display =
-        'block';
-
-    document
-        .getElementById('modalContent')
-        .innerHTML =
-
-'<h2>' +
-date +
-' - ' +
-day +
-'</h2>' +
-
-'<h3>' +
-eventType +
-'</h3>' +
-
-'<p>' +
-eventName +
-'</p>' +
-
-        '<hr>' +
-
-        people.join('<br>');
 
 }
 
 function closeModal(){
 
-    document
-        .getElementById('modal')
-        .style.display =
-        'none';
+    document.getElementById(
+        "modal"
+    ).style.display =
+    "none";
 
 }
 
-</script>
+function nextMonth(){
 
+    currentDate.setMonth(
+        currentDate.getMonth() + 1
+    );
+
+    renderCalendar();
+
+}
+
+function previousMonth(){
+
+    currentDate.setMonth(
+        currentDate.getMonth() - 1
+    );
+
+    renderCalendar();
+
+}
+
+loadEvents();
+
+</script>
 </body>
 
 </html>
