@@ -820,6 +820,7 @@ async function saveAvailability(eventId){
         .select("*")
         .eq("event_id", eventId)
         .eq("member_name", member);
+    console.log("Existing records:", existing);
 
 let error;
 
