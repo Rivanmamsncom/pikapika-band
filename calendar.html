@@ -814,7 +814,35 @@ async function saveAvailability(eventId){
             "statusSelect"
         ).value;
 
-    const { error } =
+   const { data: existing } =
+    await client
+        .from("availability")
+        .select("*")
+        .eq("event_id", eventId)
+        .eq("member_name", member);
+
+let error;
+
+if(existing.length > 0){
+
+    const result =
+        await client
+            .from("availability")
+            .update({
+                status: status,
+                updated_at:
+                    new Date()
+                    .toISOString()
+            })
+            .eq("event_id", eventId)
+            .eq("member_name", member);
+
+    error = result.error;
+
+}
+else{
+
+    const result =
         await client
             .from("availability")
             .insert([
@@ -824,6 +852,10 @@ async function saveAvailability(eventId){
                     status: status
                 }
             ]);
+
+    error = result.error;
+
+}
 
     if(error){
 
