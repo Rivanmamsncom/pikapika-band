@@ -802,7 +802,46 @@ async function loadMembers(){
     }
 
 }
- 
+async function saveAvailability(eventId){
+
+    const member =
+        document.getElementById(
+            "memberSelect"
+        ).value;
+
+    const status =
+        document.getElementById(
+            "statusSelect"
+        ).value;
+
+    const { error } =
+        await client
+            .from("availability")
+            .insert([
+                {
+                    event_id: eventId,
+                    member_name: member,
+                    status: status
+                }
+            ]);
+
+    if(error){
+
+        alert(
+            JSON.stringify(error)
+        );
+
+        console.error(error);
+
+        return;
+
+    }
+
+    alert(
+        "Availability saved successfully."
+    );
+
+} 
 loadEvents();
 
 
