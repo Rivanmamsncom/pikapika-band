@@ -687,15 +687,15 @@ async function saveEvent(dateString){
 
     if(error){
 
-        alert(
-            "Error saving event"
-        );
+    alert(
+        JSON.stringify(error)
+    );
 
-        console.error(error);
+    console.error(error);
 
-        return;
+    return;
 
-    }
+}
 
     closeModal();
 
