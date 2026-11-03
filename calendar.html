@@ -813,7 +813,8 @@ async function saveAvailability(eventId){
         document.getElementById(
             "statusSelect"
         ).value;
-
+console.log("eventId =", eventId);
+console.log("member =", member);
    const { data: existing } =
     await client
         .from("availability")
