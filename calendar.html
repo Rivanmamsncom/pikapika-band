@@ -488,24 +488,30 @@ function renderCalendar(){
 
             `<div class="date">${day}</div>`;
 
-        if(event){
-console.log(
-    "Event on calendar:",
-    event.id,
-    event.title
-);
-            content +=
+       if(event){
 
-            `<div class="event-type">
-                ${event.title}
-            </div>
+    console.log(
+        "Event on calendar:",
+        event.id,
+        event.title
+    );
 
-            <div class="event-name">
-                ${event.location}
-            </div>`;
+    content +=
 
-        }
+    `<div class="event-type">
+        ${event.title}
+    </div>
 
+    <div class="event-name">
+        ${event.location}
+    </div>
+
+    <div class="availability-summary">
+        ✅ ?
+        🟠 ?
+        ❌ ?
+    </div>`;
+}
         card.innerHTML =
             content;
 
