@@ -510,7 +510,15 @@ setTimeout(() =>
 </div>
 
 <div style="font-size:.85rem;color:#444;">
-    🕒 ${event.event_time}
+    🕒 ${new Date(
+        `2000-01-01T${event.event_time}`
+    ).toLocaleTimeString(
+        [],
+        {
+            hour: 'numeric',
+            minute: '2-digit'
+        }
+    )}
 </div>
 
 <div class="availability-summary"
