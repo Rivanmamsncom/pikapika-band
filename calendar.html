@@ -959,13 +959,36 @@ else{
     }
 
 }
-    function editEvent(
-    eventId,
-    title,
-    location,
-    time,
-    notes
-){
+  async function editEvent(eventId){
+
+    const { data, error } =
+        await client
+            .from("events")
+            .select("*")
+            .eq("id", eventId)
+            .single();
+
+    if(error){
+
+        alert(
+            JSON.stringify(error)
+        );
+
+        return;
+
+    }
+
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
+
+    `
+    <h2>Edit Event</h2>
+
+    <input
+        id="editTitle"
+        value="${data.title || ""}"
+        style="width:100%;padding{
 
     document.getElementById(
         "modalContent"
