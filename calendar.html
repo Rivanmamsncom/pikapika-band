@@ -1028,21 +1028,26 @@ else{
     style="width:100%;padding:10px;margin-bottom:10px;">
 
     <option value="Practice"
-        ${data.event_type === 'Practice'
-            ? 'selected'
-            : ''}>
+        ${data.event_type === 'Practice' ? 'selected' : ''}>
         Practice
     </option>
 
     <option value="Gig"
-        ${data.event_type === 'Gig'
-            ? 'selected'
-            : ''}>
+        ${data.event_type === 'Gig' ? 'selected' : ''}>
         Gig
     </option>
 
     <option value="Meeting"
-        ${data.event_type === 'Meeting'
+        ${data.event_type === 'Meeting' ? 'selected' : ''}>
+        Meeting
+    </option>
+
+    <option value="Recording"
+        ${data.event_type === 'Recording' ? 'selected' : ''}>
+        Recording
+    </option>
+
+</select>
   
 
     <input
