@@ -827,17 +827,17 @@ let error;
 
 if(existing.length > 0){
 
-    const result =
-        await client
-            .from("availability")
-            .update({
-                status: status,
-                updated_at:
-                    new Date()
-                    .toISOString()
-            })
-            .eq("event_id", eventId)
-            .eq("member_name", member);
+const result =
+    await client
+        .from("availability")
+        .update({
+            status: status,
+            updated_at:
+                new Date()
+                .toISOString()
+        })
+        .eq("id", existing[0].id)
+        .select();
     console.log("Update result:", result);
 
     error = result.error;
