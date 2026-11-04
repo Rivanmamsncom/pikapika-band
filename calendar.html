@@ -652,7 +652,30 @@ ${event.notes || ""}
         id="newTitle"
         placeholder="Event Title"
         style="width:100%;padding:10px;margin-bottom:10px;">
+<select
+    id="newType"
+    style="width:100%;padding:10px;margin-bottom:10px;">
 
+    <option value="Practice">
+        Practice
+    </option>
+
+    <option value="Gig">
+        Gig
+    </option>
+
+    <option value="Meeting">
+        Meeting
+    </option>
+
+    <option value="Recording">
+        Recording
+    </option>
+
+</select>
+
+
+    
     <input
         id="newLocation"
         placeholder="Location"
@@ -694,6 +717,11 @@ async function saveEvent(dateString){
         document.getElementById(
             "newTitle"
         ).value;
+    
+    const type =
+    document.getElementById(
+        "newType"
+    ).value;
 
     const location =
         document.getElementById(
@@ -716,6 +744,7 @@ async function saveEvent(dateString){
             .insert([
             {
                 title: title,
+                event_type: type,
                 location: location,
                 event_date: dateString,
                 event_time: time,
