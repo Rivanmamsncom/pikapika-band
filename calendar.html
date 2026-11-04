@@ -495,7 +495,10 @@ function renderCalendar(){
         event.id,
         event.title
     );
-
+setTimeout(() =>
+    loadAvailabilityCounts(event.id),
+    0
+);
     content +=
 
     `<div class="event-type">
@@ -507,9 +510,9 @@ function renderCalendar(){
     </div>
 
     <div class="availability-summary">
-        ✅ ?
-        🟠 ?
-        ❌ ?
+        ✅ 0
+        🟠 0
+        ❌ 0
     </div>`;
 }
         card.innerHTML =
@@ -887,6 +890,54 @@ else{
     );
 
 } 
+    async function loadAvailabilityCounts(eventId){
+
+    const { data, error } =
+        await client
+            .from("availability")
+            .select("status")
+            .eq("event_id", eventId);
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    let available = 0;
+    let maybe = 0;
+    let unavailable = 0;
+
+    data.forEach(item => {
+
+        if(item.status === "Available")
+            available++;
+
+        else if(item.status === "Maybe")
+            maybe++;
+
+        else if(item.status === "Not Available")
+            unavailable++;
+
+    });
+
+    const container =
+        document.getElementById(
+            `counts-${eventId}`
+        );
+
+    if(container){
+
+        container.innerHTML =
+
+            `✅ ${available}
+             🟠 ${maybe}
+             ❌ ${unavailable}`;
+
+    }
+
+}
 loadEvents();
 
 
