@@ -959,7 +959,7 @@ else{
     }
 
 }
-  async function editEvent(eventId){
+ async function editEvent(eventId){
 
     const { data, error } =
         await client
@@ -987,37 +987,23 @@ else{
 
     <input
         id="editTitle"
-        value="${data.title || ""}"
-        style="width:100%;padding{
-
-    document.getElementById(
-        "modalContent"
-    ).innerHTML =
-
-    `
-    <h2>Edit Event</h2>
-
-    <input
-        id="editTitle"
-        value="${title}"
+        value="${data.title || ''}"
         style="width:100%;padding:10px;margin-bottom:10px;">
 
     <input
         id="editLocation"
-        value="${location}"
+        value="${data.location || ''}"
         style="width:100%;padding:10px;margin-bottom:10px;">
 
     <input
         id="editTime"
         type="time"
-        value="${time}"
+        value="${data.event_time || ''}"
         style="width:100%;padding:10px;margin-bottom:10px;">
 
     <textarea
         id="editNotes"
-        style="width:100%;padding:10px;height:100px;">
-${notes}
-    </textarea>
+        style="width:100%;padding:10px;height:100px;">${data.notes || ''}</textarea>
 
     <br><br>
 
