@@ -502,6 +502,10 @@ setTimeout(() =>
    content +=
 
 `<div class="event-type">
+    ${event.event_type || "Event"}
+</div>
+
+<div class="event-name">
     ${event.title}
 </div>
 
@@ -1019,6 +1023,28 @@ else{
         value="${data.title || ''}"
         style="width:100%;padding:10px;margin-bottom:10px;">
 
+<select
+    id="editType"
+    style="width:100%;padding:10px;margin-bottom:10px;">
+
+    <option value="Practice"
+        ${data.event_type === 'Practice'
+            ? 'selected'
+            : ''}>
+        Practice
+    </option>
+
+    <option value="Gig"
+        ${data.event_type === 'Gig'
+            ? 'selected'
+            : ''}>
+        Gig
+    </option>
+
+    <option value="Meeting"
+        ${data.event_type === 'Meeting'
+  
+
     <input
         id="editLocation"
         value="${data.location || ''}"
@@ -1052,6 +1078,11 @@ else{
             "editTitle"
         ).value;
 
+const type =
+    document.getElementById(
+        "editType"
+    ).value;
+     
     const location =
         document.getElementById(
             "editLocation"
@@ -1072,6 +1103,7 @@ else{
             .from("events")
             .update({
                 title: title,
+                event_type: type,
                 location: location,
                 event_time: time,
                 notes: notes
