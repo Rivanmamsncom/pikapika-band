@@ -499,22 +499,26 @@ setTimeout(() =>
     loadAvailabilityCounts(event.id),
     0
 );
-    content +=
+   content +=
 
-    `<div class="event-type">
-        ${event.title}
-    </div>
+`<div class="event-type">
+    ${event.title}
+</div>
 
-    <div class="event-name">
-        ${event.location}
-    </div>
+<div class="event-name">
+    ${event.location}
+</div>
 
-    <div class="availability-summary"
+<div style="font-size:.85rem;color:#444;">
+    🕒 ${event.event_time}
+</div>
+
+<div class="availability-summary"
      id="counts-${event.id}">
-        ✅ 0
-        🟠 0
-        ❌ 0
-    </div>`;
+    ✅ 0
+    🟠 0
+    ❌ 0
+</div>`;
 }
         card.innerHTML =
             content;
