@@ -223,7 +223,22 @@ h1{
     background:#fff3cd;
 
     border:2px solid #ffc107;
+    
+.blue{
 
+    background:#d6ebff;
+
+    border:2px solid #0078d4;
+
+}
+
+.purple{
+
+    background:#f0d9ff;
+
+    border:2px solid #7b1fa2;
+
+}
 }
 
 .red{
@@ -483,6 +498,22 @@ function renderCalendar(){
 
         card.className =
             "day-card";
+        
+        if(event){
+
+    if(event.event_type === "Practice")
+        card.classList.add("blue");
+
+    else if(event.event_type === "Meeting")
+        card.classList.add("purple");
+
+    else if(event.event_type === "Gig")
+        card.classList.add("green");
+
+    else if(event.event_type === "Recording")
+        card.classList.add("orange");
+
+}
 
         let content =
 
